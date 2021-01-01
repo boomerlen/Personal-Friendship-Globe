@@ -1,0 +1,126 @@
+Journal.txt - Log File to document this project.
+
+
+1st January, 2021:
+  Been thinking about this project for some time, but it is now time to start documenting it and thinking more concretely about what I will be doing.
+  The idea is that a pair of lamps can communicate across the internet - one sets a colour which is sent to the other lamp so that both can be synchronised.
+
+  There will be three essential parts of this project:
+    1) The Base
+    2) The Lamp
+    3) The Server
+  The Base (1):
+    - Connected to power and to WIFI.
+    - Serves as an intermediary between the Lamp and the Server.
+    - Is able to charge the battery of the Lamp
+  The Lamp (2):
+    - Contains a battery, can be charged by the Base or can act within the base.
+    - Communicates with the base through IR (or similar technology).
+    - Contains a light globe that can change colour and brightness.
+    - Contains a microcontroller which can process the logic of the lamp:
+      - The lamp should have several available colours.
+      - The user can change the colour of their lamp through some physical UI.
+      - They can then export the new colour to the Server which can be loaded on the second lamp.
+      - Alternatively, they can import the current colour kept on the Server and load that onto their lamp.
+    - Hopefully is a nice lamp which looks pretty good.
+  The Server (3):
+    - Communicates with the base of both lamps in the pair.
+    - Stores locally the current colour, broadcasts it across the internet.
+    - Accepts requests from either base to update the stored colour.
+
+
+  Current Difficulties:
+    1) Working out the lamp itself.
+      - I have experimented with purchasing an RGB lamp (a lot of smart globes are available) and attempting to tinker with them so that they're usable.
+          I have a Lenovo Smart Globe that was reasonably cheap.
+          It seemed that to dissassemble it I would have to essentially break it - not a good option.
+          The only way to use such a globe, I think, would be to somehow communicate with its existing microcontroller through software.
+              This globe has an app bound to it and appears to be able to connect to wifi so I could potentially make a software oriented solution, rather
+              than programming my own microcontroller.
+              May be easier, but definitely less fun - I would be avoiding all of the microcontroller work which I would really like to explore more.
+              But that remains an option: Writing some software pretending to be the Lenovo App (which may be easier said than done), removing the need for a custom microcontroller on the lamp.
+
+      - The other option seems to be to make an RGB globe from scratch.
+          It is certainly possible to have an LED for each RGB (3) and varying their relative intensity to create different colours.
+          This article seems to break this process down: https://circuitdigest.com/electronic-circuits/rgb-light-circuit-diagram
+          This article varies the duty cycle of each LED to create different colours. The LEDS are bound to a 555 timer IC which creates a "pulse of variable width"
+          Changing the width of the pulse changes the duty cycle (the proportion of ON time to total time in a cycle) which changes the perceived brightness of the LED.
+          The length of the 555 timer pulses is controlled through a couple of resistors and capacitors - the duty cycle can be changed using a variable resistor.
+          Would need to find a way to electronically vary a resistance:
+            Variable resistors change resistance mechanically, so it would be best to have a series of fixed resistors for each preset colour and the microcontroller can select which preset
+            of resistors should be used in each timer. An EPROM might be useful here, as would transistors. Would be possible using a combination of both.
+
+          More challenging seems to guarentee the other condition of the build - the light actually being nice.
+            Would need fairly high power LEDs and some sort of globe? Might be useful to break an LED light globe anyway to get a sense of what actual LEDS are used in them.
+              Might try to buy a really cheap LED light globe just to break and examine.
+
+              The article has a video attached where the person uses the circuit to make an RGB lamp. They simply place a light globe over the three standard LEDS and it looks pretty good.
+              Might be able to just do that...
+              Definitely worth testing the circuit the article proposes with mechanically variable resistors.
+
+              I also still have some 555 timers which will help. They call the basic circuit idea a "PWM LED Dimmer Circuit".
+              I do have 3 555 timers (exactly enough for this circuit!) - I will attach their datasheet to this git under "Research".
+
+
+              I think I will ensure I experiment with the circuit so that I'm not just copying down something from the internet.
+              I think I need some new components for this (prototyping) - mainly LEDS, resistors and capacitors I think.
+
+              The 555 timer is also proving very difficult to use generally, mostly because I don't really understand much of the talk in the data sheet.
+              After watching https://www.youtube.com/watch?v=CvpP1PaQKo0, I have realised that I was focussing too much on the monostable function of the 555,
+              which is just very different to what I thought it was. I do actually definitely want the astable operation.
+
+              Most important results from the datasheet associated with astable operation are:
+
+              t_H = 0.693(R_A + R_B)C
+              t_L = 0.693(R_B)C
+              period = t_H + t_L = 0.693(R_A + 2R_B)C = P
+              frequency =  1/period = f
+
+              So, for testing purposes it would be useful to have a cycle that can actually be seen.
+              Therefore, t_H would be good to be around a second.
+
+              I currently have a capacitor of 1nF, so to be off for 1s:
+              1 = 0.693(R_B)1*10^-9 or R_B=1/(0.693*10^-9)=1.4G ohms
+              I.e. using my capacitor, R_B = t_L/(0.693*10^-9)
+
+              I don't think I have a resistor of that resistance though... The big difference is the capacitor.
+
+              It may be more useful to conduct the necessary calculations to determine which colours will be delivered by which combinations before I order parts.
+
+
+
+              Various colours and their codes: (lets have 8 (and white lol) )
+              1) Lavender (230, 230, 250) -> (0.9019, 0.9019, 0.9304)
+              2) Pale yellow (255, 255, 237) -> (1, 1, 0.9294)
+              3) Powder blue (176, 224, 230) -> (0.6902, 0.8784, 0.9020)
+              4) Warm orange (255, 127, 80) -> (1, 0.4980, 0.3137)
+              5) Pink (255, 192, 203) -> (1, 0.7529, 0.7961)
+              6) Lime green (50, 205, 50) -> (0.1961, 0.8039, 0.1961)
+              7) Deep red (130, 22, 61) -> (0.5098, 0.0863, 0.2343)
+              8) Deep blue (56, 67 162) -> (0.2196, 0.2627, 0.6353)
+              9) White (255, 255, 255) -> (1, 1, 1)
+
+              The 555 circuit requires 2 fixed capacitors. One is reccomended to be 0.01micro Farads, the other is variable.
+              I should pick a capacitor that allows for the resistors to not be too nasty.
+
+              The ratios the resistors need to be in are shown beside the colours.
+              A 555 timer needs to be configured for each LED, and they must all have the same period.
+              period = t_H + t_L = 0.693(R_A + 2R_B)C
+
+              Therefore, the relative intensities listed after each colour represents the fraction of the period that the light is on (t_h/period)
+              The period should be locked. Lets say 10ms. (small enough not to notice flickering, hopefully)
+
+              Therefore, for each colour:
+              P = 10ms
+              C = constant
+              P = 0.693(R_A + 2R_B)C
+              t_H/P = ratio to vary
+              t_H/P = 0.693(R_A+R_B)C/(0.693(R_A + 2R_B)C) = (R_A + R_B)/(R_A + 2R_B)
+              Are all values of t_H/P accessible from a locked R_A and a free R_B (or vice versa)?
+                NO! The curve y = (x+a)/(X+2a) has a horizontal asymptote at y=a for positive x, with a minimum value (for positive x) of 0.5.
+              Unfortunately we need to be able to access t_H/P < 0.5, in a few cases.
+
+              The challenge is: picking the fewest resistors possible to ensure that P*(R_A + R_B)/(R_A + 2R_B) = each number in the colour list.
+              This would be easier if I didn't want to pick such nice colours - everything would just be in simple ratios...
+              THat's ok. I might try a python script just to see what I'm working with.
+              
