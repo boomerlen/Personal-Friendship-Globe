@@ -119,8 +119,31 @@ Journal.txt - Log File to document this project.
               Are all values of t_H/P accessible from a locked R_A and a free R_B (or vice versa)?
                 NO! The curve y = (x+a)/(X+2a) has a horizontal asymptote at y=a for positive x, with a minimum value (for positive x) of 0.5.
               Unfortunately we need to be able to access t_H/P < 0.5, in a few cases.
+              More concerning, that seems to indicate that no combination delivers t_h/P<0.5
 
               The challenge is: picking the fewest resistors possible to ensure that P*(R_A + R_B)/(R_A + 2R_B) = each number in the colour list.
               This would be easier if I didn't want to pick such nice colours - everything would just be in simple ratios...
               THat's ok. I might try a python script just to see what I'm working with.
-              
+
+
+6th January 2021:
+  Been thinking more about how to progress from last time.
+    An assortment of resistors doesn't seem like a particularly efficient way to do this - I would need a lot which would clutter the board
+    unless they can be bought in smaller packages than usual.
+    I could either remove some of the accuracy from my colour duty cycle ratios and/or I could remove the requirement for a consistent period.
+    I do not actually need to care about the period, as long as it is sufficiently small (in the order of a few ms)
+        The duty cycle ratios only need to be evident for about the smallest time interval the eye can distinguish
+            Not that long, but not necessarily all the same number.
+
+    Hence, I will drop the period consistency requirement from my analysis.
+      Though I'm unsure it makes a difference as t_H/P is still the quantity to vary even if P can change...
+
+
+10th January 2021:
+  We can use a NOT IC to access the entire t_H/P range. Will then just reduce the accuracy of the ratios.
+  Ez.
+  The only requirement is that we reduce the number of required ratios, so we can be a bit more intelligent about THat
+  than just blindly removing the accuracy of my ratios.
+  Where there is a subtle difference, the difference can be maintained with some accuracy. If there is a small difference
+  between different colours, this could be averaged to make a less meaningful change (or if a ratio is sufficiently different from the other colours
+  its accuracy is probably less important.)
