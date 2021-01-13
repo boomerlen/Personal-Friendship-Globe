@@ -147,3 +147,18 @@ Journal.txt - Log File to document this project.
   Where there is a subtle difference, the difference can be maintained with some accuracy. If there is a small difference
   between different colours, this could be averaged to make a less meaningful change (or if a ratio is sufficiently different from the other colours
   its accuracy is probably less important.)
+  This is unless there's a better way to digitally control voltage or similar across the globes. This seems one of the best ways though.
+
+
+  First revision:
+  Lavender: (0.9, 0.9, 0.93)
+  Pale yellow: (1, 1, 0.93)
+  Powder blue: (0.7, 0.88, 0.9)
+  Warm orange: (1, 0.5, 0.3)
+  Pink: (1, 0.7, 0.8)
+  Lime green: (0.2, 0.8, 0.2)
+  Deep red: (0.5, 0.88, 0.22)
+  Deep blue: (0.22, 0.26, 0.7) - Problematic
+  White: (1, 1, 1)
+
+  Which reduces to 13 different ratios from 19. 
