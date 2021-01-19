@@ -161,4 +161,83 @@ Journal.txt - Log File to document this project.
   Deep blue: (0.22, 0.26, 0.7) - Problematic
   White: (1, 1, 1)
 
-  Which reduces to 13 different ratios from 19. 
+  Which reduces to 13 different ratios from 19.
+
+19th January 2021:
+  First thing, I can definitely not just use a NOT IC to access the whole t_H/P range.
+  I can't invert a resistance.
+
+  In other news, I've taken apart a light globe and it wasn't too hard but I've unforunately removed some of the
+  diffusing paint in the process.
+
+  Other thing to do today is to improve the resistors script so that I can choose some basic components to test with.
+  Also buying microcontrollers now.
+
+  Ok I remembered what I meant about the inverter. I meant we can invert the duty cycle. If the duty cycle is 60% then we get 40% using an inverter.
+  Silly me.
+
+  Using my program, its clear that for testing purposes I would want a capacitor of about 0.001 Farads
+  But for the actual product to have a period of about 10ms I would want:
+  C = 0.00001 farads (10E-5) for larger resistor in the 1kohm region.
+
+
+  Might figure out the resistors that would be best now using:
+  First revision:
+  Lavender: (0.9, 0.9, 0.93)
+  Pale yellow: (1, 1, 0.93)
+  Powder blue: (0.7, 0.88, 0.9)
+  Warm orange: (1, 0.5, 0.3)
+  Pink: (1, 0.7, 0.8)
+  Lime green: (0.2, 0.8, 0.2)
+  Deep red: (0.5, 0.88, 0.22)
+  Deep blue: (0.22, 0.26, 0.7) - Problematic
+  White: (1, 1, 1)
+
+    0.9: R_A = 2000, R_B = 250
+    0.93: R_A = 2000, R_B = 150
+    0.7: R_A = 2000, R_B = 1500
+    0.88: R_A = 2000, R_B = 300
+    0.5: R_A = 150, R_B = 2000 (the largest difference possible will get closest to 0.5 - asymptote)
+    0.3: invert 0.7
+    0.8: R_A  = 2000, R_B = 650
+    0.2: invert 0.8
+    0.22: invert 0.78: R_A = 2000, R_B = 800
+    0.26: invert 0.74: R_A = 2000, R_B = 1100
+
+    In total the resistances therefore are:
+      2000, 250, 150, 1500, 300, 650, 800, 1100 (ohms)
+      Which aren't that many!
+
+    Now I need to put thought into the actual arrangement of these resistors to figure out how many I realistically need.
+    The key idea is that a the microcontroller can vary the resistance by choosing which resistors to use. Luckily, R_A only has two options at this point: 2000 or 150.
+    And R_B has all the rest.
+    If each resistor has a diode on the end of it and a transistor connected to the microcontroller, the microcontroller should be able to choose which resistor to use.
+    Will have to test this concept by buying the relevant stuff:
+      Next shopping cart:
+        (Jaycar)
+        - 2 Microcontrollers (I've found one which looks good and is very cheap (fair enough only needs to be 8 bit!))
+        - 8 2kohm resistors (smallest packet)
+        - 8 300ohm resistors
+        - 8 150ohm resistors
+        - 8 1.5kohm resistors
+        - 8 1.1kohm resistors
+        Jokes. These resistors are too small and annoying. (I also can't use them for anything else if they're this low)
+
+        The capacitor is moving up to 10E-6F and the resistors are moving up 1 place value.
+        New total resistances:
+        20k, 2.5k, 1.5k, 15k, 3k, 6.5k, 8k, 11k ohms
+        Shopping cart:
+        - 2 microcontrollers
+        - 8 20k resistors
+        - 8 1.5k resistors
+        - 8 1k resistors (can add to 1.5k to make 2.5k)
+        - 8 15k resistors
+        - 8 3k resistors
+        - 8 6.8k resistors (replacing 6.5k)
+        - 8 8.2k resistors (replacing 8k)
+        - 8 11k resistors
+        - 2 1 uFarad capacitors
+        - 1 100uFarad capacitor (for testing - period of about 1s)
+        - 3xAA battery holder (Cuz I needed a better power supply gr - just for this, will use better one later)
+        - 10 NPN transistors (to control current flow)
+        $23.85 - ordered!
