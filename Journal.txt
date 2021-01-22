@@ -228,7 +228,7 @@ Journal.txt - Log File to document this project.
         20k, 2.5k, 1.5k, 15k, 3k, 6.5k, 8k, 11k ohms
         Shopping cart:
         - 2 microcontrollers
-        - 8 20k resistors
+        - 8 2s0k resistors
         - 8 1.5k resistors
         - 8 1k resistors (can add to 1.5k to make 2.5k)
         - 8 15k resistors
@@ -241,3 +241,49 @@ Journal.txt - Log File to document this project.
         - 3xAA battery holder (Cuz I needed a better power supply gr - just for this, will use better one later)
         - 10 NPN transistors (to control current flow)
         $23.85 - ordered!
+
+  21st of January 2021:
+    I've collected my parts as well as 4 more capacitors and 4 AND gate ICs as I'm not sure if the transistors will do the job or if I mean to get an AND gate.
+    I'm going to now try and experiment with the 555 circuit using my larger capacitor - an attempt to get a bit more familiar with how it works.
+
+    It seems the 555 outputs 225mA of current - should be enough for an LED? Will add a resistor of my own to ensure. I have also discovered that my diodes are rated to 1A which should be fine.
+    It works! At least without tying pin 3 to pin 8 (which seemed very silly anyway)
+      Only issue is that the light is extremely dim, 225mA is not a lot of current.
+      May use it to trigger a transistor - I think their main use is to allow such a small signal to trigger a larger one anyway. I will try.
+      Transistor worked (functioned) but didn't seem to make the led brighter... will have to consider further.
+
+      The whole circuit has also stopped working now... Not sure what's up with that. But tbf so has my LED. Hopefully I haven't blown it or anything.
+      Seems that I've somehow blown one of my LEDS... Maybe the 555 isn't actually exporting 255mA... Actually I think it is, I must've messed something else up.
+      Let's work on getting the resistor choice to work for now I think.
+        Each resistor needs its own transistor and diode at the end. The transistor's base is connected to some central logic and the collector comes from wherever and the emitter goes to
+        the place its gotta go.
+
+  22nd January 2021:
+    I might design the control logic now, because an equally important challenge is actually programming my MCU.
+      The MCU has 15 programmable io lines which is actually probably more than enough for exporting the data we would need to control the computer.
+      I'm sketching the sort of logic we would need on paper. Currently it looks like 10 bits will code for everything which is under the amount of IO lines accessible.
+      Also means that 10 resistors is the total amount we would need to control one of these 555s.
+      Question is whether multiple 555s can share these resistors, otherwise I somehow need to stuff 30 resistors onto this chip.
+        Only issue is that we waste 6 bits of every 2 bytes, unless I can think of something useful to do with the remaining 6 bits.
+        But also does this matter? The device has 16Kb of memory so shouldn't be a big deal really.
+        Ok one more bit for an invert flag because half of these duties want to be inverted.
+        Saved a DOCX with the final bit table. We now can encode:
+        0.93 = 10000000100
+        0.9  = 10000000110
+        0.88 = 10000001000
+        0.8  = 10000010000
+        0.7  = 10010000000
+        0.5  = 01100000000
+        0.22 = 10000100001
+        0.26 = 10001000001
+
+
+        Also had idea - If I just have 2 bytes of 1.5k or 1k resistors I could potentially access a far greater range of colours...
+        Try next time.
+        I might try this time to use AND gates as switches rather than transistors because the AND gates are a bit more compact.
+          Only consideration is the internal resistance of the AND ICs, but I dont think that it'll be too much. My smallest resistor causes less than a 10mA current so we should be ok for blowing
+          the AND ics.
+          And gates currently don't seem to be working, even when isolated... It's behaving strangely - when I disconnect one of the inputs the output goes high for a second or two, even if I unplug an input cable that was
+          previously low...... It seems to need to be grounded to deactivate... very annoying I think.
+          If the AND gates don't work, a transistor should suit fine. A transistor based system doesn't seem to be any differet, I was just thinking of saving those for the LED amplification on the other end.
+          The MCU Flash Memory looks like its programmed like an EEPROM usually is - Will connect to my arduino I think.
