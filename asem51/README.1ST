@@ -1,0 +1,95 @@
+
+                   ASEM-51 Version 1.3 for Linux
+                   =============================
+
+                   W.W. Heinz,  December 31, 2002
+
+
+1. What exactly is ASEM-51?
+---------------------------
+ASEM-51 is a two-pass macro assembler for the Intel MCS-51 family of
+microcontrollers. It is running on the PC under MS-DOS, Windows, and Linux.
+The ASEM-51 assembly language is a rich subset of the Intel standard that
+guarantees maximum compatibility with existing 8051 assembler sources.
+ASEM-51 can generate two sorts of object files: Intel-HEX format, which is
+directly accepted by most EPROM programmers, and absolute OMF-51 format,
+which is required for many simulators, emulators and target debuggers.
+Thus ASEM-51 is suitable for small and medium MCS-51-based microcontroller
+projects in hobby, education and business.
+For detailed information refer to the documentation provided.
+
+
+2. May I really use ASEM-51?
+----------------------------
+Yes!   :-)
+If you can't believe that, read the ASCII file license.doc provided.
+
+
+3. What do I need to get ASEM-51 running?
+-----------------------------------------
+The Linux implementation requires a 386-based Linux system with kernel 2.0
+or later. All binaries are linked statically and don't need any libraries.
+ASEM-51 is fast enough even for the slowest Linux systems possible!
+However, the HTML documentation set requires a 90 MHz Pentium (or better)
+and a web browser.   :-)
+If you have a 16 MHz 386 only, you should better read the ASCII manuals!
+
+
+4. How can I install ASEM-51 on my PC?
+--------------------------------------
+ASEM-51 for Linux is available as a tar archive and an rpm package.
+If you have got the rpm package, login as root and simply type
+
+   rpm -i asem51-1.3-1.i386.rpm
+
+The rpm package has been tested on S.u.S.E.-Linux only, but should also
+work on other Linux distributions that meet the FHS directory standard.
+If you have got the tar archive, perform the following steps:
+
+   gzip -d asem51-1.3-ELF.tar.gz
+   tar xvf asem51-1.3-ELF.tar
+   cd asem51
+   sh install.sh
+
+If you are installing ASEM-51 as root (preferred), the installation script
+install.sh will install the whole package in /usr/local/share/asem-51/1.3,
+and establish some symbolic links in /usr/local/bin and /usr/local/man/man1.
+
+If you are installing ASEM-51 under another user-id, install.sh tries to
+install the software in your home directory under ~/asem-51/1.3, and
+establish some symbolic links in ~/bin and ~/man/man1.
+
+For details see the messages, install.sh is displaying on the console,
+and do some fine-tuning accordingly, if necessary.
+
+
+5. Where can I get more information?
+------------------------------------
+The assembler and the hex-to-binary converter are described in detail
+in file asem_51.doc.
+The 8051 bootstrap program BOOT-51 is explained in file boot51.doc.
+File license.doc contains the ASEM-51 license agreement.
+All what's new since version 1.2, is listed in file release.130.
+If you need updates or assistance, or you want to report bugs, see
+file support.doc.
+
+To read the HTML documentation, bookmark the index file docs.htm.
+
+For late-breaking news check out the official ASEM-51 homepage at
+
+    http://plit.de/asem-51/
+
+
+6. How can I get rid of that bull-shit again?
+---------------------------------------------
+If you have installed ASEM-51, but you don't like it, you can easily
+uninstall it. If you have installed the rpm package, simply type
+
+    rpm -e asem51
+
+If you have installed the generic tar archive, be sure to uninstall
+ASEM-51 under the same user-id you previously used for installation! Run
+
+    uninst51.sh
+
+and that's it.

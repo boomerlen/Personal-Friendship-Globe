@@ -1,0 +1,119 @@
+.\" Man page for BOOT-51 V1.1 customiz
+.TH CUSTOMIZ 1 "31 December 2002" "BOOT\-51 V1.1" "BOOT\-51 Customization Utility"
+.SH NAME
+customiz \-  customize BOOT\-51 for an 8051 target system
+.SH SYNOPSIS
+.B customiz
+baud [timer [prec [clock [start [user]]]]]
+.SH DESCRIPTION
+.B customiz
+is a customization utility for the 8051 bootstrap program
+.BR "BOOT\-51" "."
+Its source is distributed in file
+.IR "boot51.a51" ","
+which must be customized for the target board, before it is ready for
+assembly. This is performed with an include file
+.IR "boot51.inc" ","
+containing the required configuration data.
+.I boot51.inc
+can be generated with the utility program
+.BR "customiz" "."
+.SH OPTIONS
+There are two major groups of configuration parameters:
+.sp
+\-  baudrate generation
+.br
+\-  memory addresses
+.sp
+The parameters
+.BR "baud" ", " "timer" ", " "prec" ", and " "clock"
+specify everything that is required for baudrate generation, while
+.BR "start" ", and " "user"
+define important memory addresses.
+.HP 6
+.B baud
+is the desired nominal baudrate (in Baud), BOOT\-51 should use
+for communication with the host system.
+.HP 6
+.B timer
+is the on\-chip timer or baudrate generator that is used for
+baudrate generation. Legal values are:
+.RS
+.HP 5
+.B T1
+= timer 1 (default)
+.br
+available on nearly all 8051 derivatives
+.HP 5
+.B T2
+= timer 2
+.br
+available on 8052/32 and all true compatibles
+.HP 5
+.B BG
+= internal baudrate generator
+.br
+available on 80C515/35 and 80C517/37
+.HP 5
+.B BA
+= internal baudrate generator
+.br
+available on 80C515A and 80C517A
+.HP 5
+.B D1
+= timer 1
+.br
+with clock/12 or clock/4 prescaler on 80C320
+.RE
+.HP 6 
+.B prec
+is the required relative precision of the baudrate
+in percent. The default precision is 1.0 %.
+.HP 6
+.B clock
+is the system clock frequency in MHz.
+.br
+(11.0592 MHz default)
+.HP 6
+.B start
+is the start address of BOOT\-51 on the target system in hex
+representation. (default is 0000H)
+.HP 6
+.B user
+is the usual hex start address of the application programs
+in the external memory. (default is 8000H)
+.SH FILES
+When
+.B customiz
+is terminating successfully, it creates an include file
+.I boot51.inc
+in the working directory. This file is included by
+.IR "boot51.a51" "!"
+.SH "EXIT STATUS"
+When terminating,
+.B customiz
+returns an exit code to the calling process:
+.sp
+.RS
+.BR "0" "    no errors"
+.br
+.BR "1" "    parameter or baudrate errors"
+.br
+.BR "2" "    fatal runtime error"
+.RE
+.SH USAGE
+For detailed information on
+.B BOOT\-51
+customization see the
+.B BOOT\-51 User's Manual
+in ASCII file
+.IR "boot51.doc" ","
+or start reading with HTML file
+.IR "docs.htm" "!"
+.SH AUTHOR
+W.W. Heinz
+.SH "SEE ALSO"
+.BR asem (1),
+.BR hexbin (1),
+.BR reset51 (1),
+.BR boot (1)

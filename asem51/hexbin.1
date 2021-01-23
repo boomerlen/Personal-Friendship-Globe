@@ -1,0 +1,115 @@
+.\" Man page for ASEM-51 V1.3 hexbin
+.TH HEXBIN 1 "31 December 2002" "ASEM-51 V1.3" "ASEM-51 Hex-File Converter"
+.SH NAME
+hexbin \-  convert an Intel HEX\-file to a binary image
+.SH SYNOPSIS
+.B hexbin
+[options] hexfile [binary]
+.SH DESCRIPTION
+.B hexbin
+is a program that converts
+.B Intel HEX\-files
+to plain binary image files.
+.SH FILES
+.B hexfile
+is the
+.BR "Intel HEX\-file" ", and " "binary"
+is the output file.
+.br
+All file names that are specified explicitly, are left unchanged.
+The parameter
+.B binary
+is optional. When omitted, the
+.B binary
+file name is derived from the
+.B hexfile
+name, but with extension
+.IR ".bin" "."
+.br
+The maximum length of a file parameter is limited to 255 characters!
+.SH OPTIONS
+.B hexbin
+recognizes the following options:
+.sp
+.B \-o offs
+.br
+.B \-\-offset=offs
+.br
+.RS
+inserts
+.B offs
+dummy bytes on top of the output file before the
+.B HEX
+record with the lowest load address.
+.B offs
+must be a hex number. (Default: offs=0)
+.RE
+.sp
+.B \-l len
+.br
+.B \-\-length=len
+.br
+.RS
+appends as many dummy bytes after the
+.B HEX
+record with the highest load address until
+the total file length becomes exactly
+.BR "len" "."
+.B len
+must be a hex number. (Default: append 0 bytes)
+.RE
+.sp
+.B \-f peep
+.br
+.B \-\-fill=peep
+.br
+.RS
+fills all peepholes in the output file with dummy bytes of the value
+.BR "peep" "."
+.B peep
+must be a hex number. (Default: peep=FF)
+.RE
+.sp
+.BR "\-v" ", " "\-\-verbose"
+.br
+.RS
+output a brief file conversion report and
+additional product and version information.
+.RE
+.sp
+Long options may be abbreviated as long as they remain unique.
+All option names are case\-sensitive!
+.SH "EXIT STATUS"
+When terminating,
+.B hexbin
+returns an exit code to the calling process:
+.sp
+.RS
+.BR 0 "    no errors"
+.br
+.BR 1 "    conversion errors detected"
+.br
+.BR 2 "    fatal runtime error"
+.RE
+.sp
+.SH USAGE
+For detailed information on
+.B hexbin
+refer to the
+.B ASEM\-51 User's Manual
+in ASCII file
+.IR "asem_51.doc" ","
+or start reading with HTML file
+.IR "docs.htm" "!"
+.SH "CONFORMING TO"
+.B hexbin
+can process object files in 16\-bit
+.B Intel\-HEX
+format.
+.SH AUTHOR
+W.W. Heinz
+.SH "SEE ALSO"
+.BR asem (1),
+.BR customiz (1),
+.BR reset51 (1),
+.BR boot (1)

@@ -287,3 +287,78 @@ Journal.txt - Log File to document this project.
           previously low...... It seems to need to be grounded to deactivate... very annoying I think.
           If the AND gates don't work, a transistor should suit fine. A transistor based system doesn't seem to be any differet, I was just thinking of saving those for the LED amplification on the other end.
           The MCU Flash Memory looks like its programmed like an EEPROM usually is - Will connect to my arduino I think.
+
+
+23rd January 2021:
+  Taking a break from wiring resistors to try and program my MCU.
+  I'm using an Arduino Uno to do this I think, I will just need to be clear on all of the conventions I need to use for programming the chip.
+  It also seems that I may need a resonator to drive the computer clock. That can be a future concern.
+  Alternatively I can have my own clock at least to begin with as it seems that the computer is happy to accept some other source of clock to advance the program counter.
+
+  The datasheet outlines how to program the Flash:
+    "Power-up sequence:"
+    1. Apply power between Vcc and GND pins
+    2. Set RST and XTAL1 to GND
+    3. Set RST to HIGH
+    4. Set R3.2 to HIGH
+    For "Write Code Data":
+      P3.3 = L
+      P3.4 = H
+      P3.5 = H
+      P3.7 = H
+      RST/VPP = 12V (Note that this is above the standard operating voltage of the chip, Vcc should only be 5/6V)
+        Therefore, additional measures will need to be taken to allow for this criteria.
+    For "Read Code Data":
+      RST/VPP = H
+      P3.2/PROG = H
+      P3.3 = L
+      P3.4 = L
+      P3.5 = H
+      P3.7 = H
+    For "Chip Erase" (necessary before every write as chip is EEPROMish):
+      RST/VPP = 12V
+      P3.3 = H
+      P3.4 = L
+      P3.5 = L
+      P3.7 = L
+    "Programming and Verifying":
+    5. Choose which of those I'm after and set the pins accordingly.
+    6. Apply first byte of data from P1.0 to P1.7
+    7. Raise RST to 12V to enable programming
+    8. Pulse P3.2 once to program the byte into memory (apparently takes abut 1.2ms)
+    9. I can check that byte by:
+      1. Lower RST to H (6V or something)
+      2. Set pins to "Read Code Data" (see above)
+      3. Read the data from the P1 pins and verify.
+    10. Pulse XTAL1 once to advance the address counter.
+    11. Repeat from 6 to 10.
+    "Power-off sequence":
+    12. Set XTAL1 to L
+    13. Set RST to L
+    14. Disconnect power.
+
+    Instead of verifying each byte as I go, it may be easier to verify the whole thing at the end.
+    This is done by advancing the program counter as we go.
+
+    Honestly, this doesn't seem too difficult.
+
+    This will depend on how I connect the pins though, of course.
+    The Arduino's 5V input isn't software controlled so I would need to tie it to another pin that is software controlled with a transistor to use it.
+      I can just tie it manually for now.
+
+    Unsure which end of the byte goes in which port. I'm going to assume the computer is little-endian (least-significant byte at smallest address)
+    I.e. P1.0 is the units column of my byte.
+
+    I have now downloaded an assembler. The arduino code should work aside from a couple of minor issues.
+    Just needs to be able to load a file now and we're good. The assembler is for linux however so I need to use the Linux subsystem to operate it.
+
+    The chip is very old so finding an assembler that'll do it seems to be a bit tough...
+
+    That's all for today.
+    TOdo:
+      Find a good assembler
+      Test the chip
+      Find a way to get 12V of input to one of those chip pins
+      Probs get another transistor
+      GEt a crystal oscillator (or resonator or whatever its called)
+      

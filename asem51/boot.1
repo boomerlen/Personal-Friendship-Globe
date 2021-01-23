@@ -1,0 +1,113 @@
+.\" Man page for BOOT-51 V1.1 boot
+.TH BOOT 1 "31 December 2002" "BOOT\-51 V1.1" "BOOT\-51 Bootstrapping Script"
+.SH NAME
+boot \-  assemble, upload and run an 8051 program
+.SH SYNOPSIS
+.B boot
+sourcefile
+.SH DESCRIPTION
+.B boot
+is a shell script that can simplify and speed up the software
+development cycle of 8051 assembly language programs.
+It (optionally) resets the 8051 target system, assembles the specified
+.BR "sourcefile" ","
+uploads the generated Intel\-HEX file over a serial port, and finally
+runs the program.
+.br
+For this, a customized version of the bootstrap program BOOT\-51
+must be installed on the 8051 target board, and the macro assembler
+ASEM\-51 must be installed on the host system!
+.SH FILES
+.B boot
+requires only one command line parameter: the file name of the assembler
+source (without extension
+.IR ".a51" ")."
+For example, the command
+.sp
+.RS
+.B boot blink
+.RE
+.sp
+would (optionally) first reset the 8051 board, then assemble the program
+.IR "blink.a51" ","
+upload the generated Intel\-HEX file
+.I blink.hex
+to the target system, and finally run it.
+.br
+Furthermore, the list file
+.I blink.lst
+is generated, containing a detailed assembler listing with error diagnostics.
+.SH OPTIONS
+In principle,
+.B boot
+itself contains only configuration data.
+There are several options to reset and bootstrap the 8051 target board.
+To get the shell script running, change the configuration parameters
+according to your local requirements. (See commentary inside
+.BR "boot" "!)"
+.br
+Apart of this,
+.B boot
+calls only the
+.B upload
+script, which does the whole work. Please do not edit
+.BR "upload" ","
+and do not run it directly!
+.br
+If you want to operate several 8051 boards with the same
+host system, create an individual
+.B boot
+script for every target board (boot1, boot2, boot3, ...) and leave
+.B upload
+unchanged. The number of boards is restricted by the number of ports only.
+.SH "EXIT STATUS"
+When terminating,
+.B boot
+returns the exit code 0 on success.
+In case of error, the exit code of the failed command is returned.
+.SH USAGE
+For general information on bootstrapping, hardware requirements and
+.B BOOT\-51
+customization see the
+.B BOOT\-51 User's Manual
+in ASCII file
+.IR "boot51.doc" "."
+.br
+For detailed information on writing
+.B 8051
+assembly language programs and the usage of the macro assembler
+.B ASEM\-51
+see the
+.B ASEM\-51 User's Manual
+in ASCII file
+.IR "asem_51.doc" "."
+.br
+Or simply start reading with HTML file
+.IR "docs.htm" "!"
+.SH NOTES
+For uploading the generated Intel\-HEX files, you must
+have full read/write access to the serial port.
+.br
+If you decide to automatically reset your
+target system with a printer port, the
+.B reset51
+program needs direct access to I/O ports and
+therefore requires root privileges!
+(Set the "set\-user\-id" bit for
+.BR "reset51" ".)"
+.br
+If you reset your 8051 board with the DTR signal of the serial port
+(upload device is same as reset device), this is performed with the
+.B stty
+command. This should also work with exotic (non\-16450) serial ports.
+In this case,
+.B reset51
+doesn't require root privileges, because
+it is invoked for delay purposes only.
+.SH AUTHOR
+W.W. Heinz
+.SH "SEE ALSO"
+.BR asem (1),
+.BR hexbin (1),
+.BR customiz (1),
+.BR reset51 (1)

@@ -1,0 +1,77 @@
+.\" Man page for BOOT-51 V1.1 reset51
+.TH RESET51 1 "31 December 2002" "BOOT\-51 V1.1" "BOOT\-51 Reset Utility"
+.SH NAME
+reset51 \-  reset an 8051 target system
+.SH SYNOPSIS
+.B reset51
+/dev/port [pulsewidth]
+.SH DESCRIPTION
+.B reset51
+uses a parallel or serial port of the PC to generate
+reset pulses for an 8051 target system. When executed,
+.B reset51
+forms a positive pulse at D0 (pin 2), and a negative pulse at
+D1 (pin 3) of a PC printer port, or a "high" pulse (\-12V!)
+at the DTR output of a serial port respectively.
+.br
+If your 8051 board has a reset input (or you can establish one)
+you should automatically reset it before every program upload.
+This can dramatically speed up the software development cycle,
+because you always forget to press the reset button, don't you?
+.br
+Since
+.B reset51
+needs direct access to I/O\-ports, it requires root privileges!
+.SH OPTIONS
+.HP 6
+.B port
+is the I/O port which is used to output the reset pulse.
+Legal ports are:
+.sp
+.RS
+lp0,   lp1,   lp2,
+.br
+ttyS0, ttyS1, ttyS2, ttyS3,
+.br
+cua0,  cua1,  cua2,  cua3,
+.br
+null
+.sp
+If /dev/null is specified as reset device, the program delays only.
+.RE
+.HP 6
+.B
+pulsewidth
+is the duration of the reset pulse in ms.
+.br
+Legal values are:  1 \<=
+.B pulsewidth
+\<= 65535
+.br
+(default is 50)
+.SH "EXIT STATUS"
+When terminating,
+.B reset51
+returns an exit code to the calling process:
+.sp
+.RS
+.BR "0" "    no errors"
+.br
+.BR "1" "    fatal runtime error"
+.RE
+.SH USAGE
+For detailed information on using
+.B reset51
+in shell scripts see the
+.B BOOT\-51 User's Manual
+in ASCII file
+.IR "boot51.doc" ","
+or start reading with HTML file
+.IR "docs.htm" "!"
+.SH AUTHOR
+W.W. Heinz
+.SH "SEE ALSO"
+.BR asem (1),
+.BR hexbin (1),
+.BR customiz (1),
+.BR boot (1)
